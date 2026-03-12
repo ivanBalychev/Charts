@@ -119,13 +119,6 @@ open class YAxisRenderer: NSObject, AxisRenderer
         }
     }
     
-    private func width(text: String, font: UIFont) -> CGFloat {
-        
-        let constraintRect = CGSize(width: .greatestFiniteMagnitude, height: font.lineHeight)
-        let boundingBox = text.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font: font], context: nil)
-        return ceil(boundingBox.width)
-    }
-    
     /// draws the y-labels on the specified x-position
     open func drawYLabels(
         context: CGContext,
