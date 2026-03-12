@@ -19,6 +19,8 @@ open class YAxisRenderer: NSObject, AxisRenderer
     @objc public let viewPortHandler: ViewPortHandler
     @objc public let axis: YAxis
     @objc public let transformer: Transformer?
+    
+    @objc public var revertYLabels: Bool = false
 
     @objc public init(viewPortHandler: ViewPortHandler, axis: YAxis, transformer: Transformer?)
     {
@@ -117,6 +119,13 @@ open class YAxisRenderer: NSObject, AxisRenderer
         }
     }
     
+    private func width(text: String, font: UIFont) -> CGFloat {
+        
+        let constraintRect = CGSize(width: .greatestFiniteMagnitude, height: font.lineHeight)
+        let boundingBox = text.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font: font], context: nil)
+        return ceil(boundingBox.width)
+    }
+    
     /// draws the y-labels on the specified x-position
     open func drawYLabels(
         context: CGContext,
@@ -139,7 +148,8 @@ open class YAxisRenderer: NSObject, AxisRenderer
             context.drawText(text,
                              at: CGPoint(x: fixedPosition + xOffset, y: positions[i].y + offset),
                              align: textAlign,
-                             attributes: [.font: labelFont, .foregroundColor: labelTextColor])
+                             attributes: [.font: labelFont, .foregroundColor: labelTextColor],
+                             revertYLabels: revertYLabels)
         }
     }
     
