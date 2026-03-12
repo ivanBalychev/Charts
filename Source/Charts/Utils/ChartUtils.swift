@@ -127,9 +127,16 @@ extension CGContext
         NSUIGraphicsPopContext()
     }
 
-    public func drawText(_ text: String, at point: CGPoint, align: TextAlignment, anchor: CGPoint = CGPoint(x: 0.5, y: 0.5), angleRadians: CGFloat = 0.0, attributes: [NSAttributedString.Key : Any]?)
+    public func drawText(_ text: String, at point: CGPoint, align: TextAlignment, anchor: CGPoint = CGPoint(x: 0.5, y: 0.5), angleRadians: CGFloat = 0.0, attributes: [NSAttributedString.Key : Any]?, revertYLabels: Bool = false)
     {
+        
         let drawPoint = getDrawPoint(text: text, point: point, align: align, attributes: attributes)
+        
+        if revertYLabels {
+            saveGState()
+            translateBy(x: drawPoint.x + text.size(withAttributes: attributes).width, y: 0)
+            scaleBy(x: -1, y: 1)
+        }
         
         if (angleRadians == 0.0)
         {
@@ -142,6 +149,10 @@ extension CGContext
         else
         {
             drawText(text, at: drawPoint, anchor: anchor, angleRadians: angleRadians, attributes: attributes)
+        }
+        
+        if revertYLabels {
+            restoreGState()
         }
     }
     
